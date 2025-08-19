@@ -272,7 +272,7 @@ SocialCalc.Constants = {
     * Default column width as text
     * @type {string}
     */
-   defaultColWidth: "80",
+   defaultColWidth: "120",
 
    /** 
     * Minimum column width as numeric value

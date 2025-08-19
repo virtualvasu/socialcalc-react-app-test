@@ -78,11 +78,18 @@ const SocialCalc = () => {
             // Clear any existing content
             spreadsheetRef.current.innerHTML = '';
             
-            // Initialize with explicit dimensions
+            // Get container dimensions
+            const container = spreadsheetRef.current;
+            const containerWidth = container.offsetWidth || window.innerWidth - 40;
+            const containerHeight = container.offsetHeight || 500;
+            
+            console.log('Container dimensions:', containerWidth, 'x', containerHeight);
+            
+            // Initialize with container dimensions
             spreadsheetControl.InitializeSpreadsheetControl(
               spreadsheetRef.current, 
-              500, // height
-              800, // width
+              containerHeight - 10, // height (leave some margin)
+              containerWidth - 10,   // width (leave some margin)
               0    // spacebelow
             );
             
@@ -94,6 +101,34 @@ const SocialCalc = () => {
                 setSpreadsheet(spreadsheetControl);
                 setIsLoaded(true);
                 console.log('SocialCalc initialized successfully');
+                
+                // Force the spreadsheet to recalculate its layout and expand to full width
+                setTimeout(() => {
+                  if (spreadsheetControl.editor && spreadsheetControl.editor.context) {
+                    try {
+                      // Force a redraw to ensure proper sizing
+                      spreadsheetControl.editor.context.showDisplayCellsAndStatus();
+                      
+                      // Ensure the grid uses the full available width
+                      const gridElement = spreadsheetRef.current.querySelector('.SocialCalc-grid-control');
+                      if (gridElement) {
+                        gridElement.style.width = '100%';
+                        gridElement.style.minWidth = '100%';
+                      }
+                      
+                      // Ensure editing pane uses full width
+                      const editingPane = spreadsheetRef.current.querySelector('.SocialCalc-editingpane');
+                      if (editingPane) {
+                        editingPane.style.width = '100%';
+                        editingPane.style.minWidth = '100%';
+                      }
+                      
+                      console.log('Forced spreadsheet layout recalculation');
+                    } catch (e) {
+                      console.warn('Could not force layout recalculation:', e);
+                    }
+                  }
+                }, 500);
               } else {
                 setError('SocialCalc failed to create sheet object');
               }
@@ -115,9 +150,23 @@ const SocialCalc = () => {
     // Start initialization after a brief delay
     setTimeout(initializeSocialCalc, 1000);
 
+    // Add resize handler to make spreadsheet responsive
+    const handleResize = () => {
+      if (spreadsheet && spreadsheetRef.current) {
+        // Force recalculation of the spreadsheet layout
+        if (spreadsheet.editor && spreadsheet.editor.context) {
+          spreadsheet.editor.context.showDisplayCellsAndStatus();
+        }
+      }
+    };
+
+    // Add event listener for window resize
+    window.addEventListener('resize', handleResize);
+
     // Cleanup function
     return () => {
       mounted = false;
+      window.removeEventListener('resize', handleResize);
       if (spreadsheetRef.current) {
         spreadsheetRef.current.innerHTML = '';
       }

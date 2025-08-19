@@ -1,8 +1,8 @@
 .socialcalc-container {
   width: 100%;
-  max-width: 1200px;
+  max-width: 100%;
   margin: 0 auto;
-  padding: 20px;
+  padding: 10px;
   box-sizing: border-box;
 }
 
@@ -10,8 +10,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
-  padding: 15px;
+  margin-bottom: 10px;
+  padding: 10px;
   background: #f5f5f5;
   border-radius: 8px;
   border: 1px solid #ddd;
@@ -121,30 +121,42 @@
   overflow: hidden;
   background: white;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin: 0;
+  width: 100%;
+  height: 70vh;
+  min-height: 500px;
 }
 
 .workbook-tabs {
   background: #e6f2ff;
   border-bottom: 1px solid #ccc;
   min-height: 30px;
+  padding: 0;
+  margin: 0;
 }
 
 .spreadsheet-container {
-  min-height: 500px;
-  height: 500px;
-  overflow: auto;
+  height: calc(100% - 30px);
+  overflow: hidden;
   background: white;
   position: relative;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .spreadsheet-container > div {
   width: 100% !important;
   height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
 }
 
 .socialcalc-footer {
-  margin-top: 20px;
-  padding: 15px;
+  margin-top: 10px;
+  padding: 10px;
   background: #f9f9f9;
   border-radius: 8px;
   border: 1px solid #eee;
@@ -160,15 +172,106 @@
 /* Override some SocialCalc styles for better integration */
 #tableeditor {
   background: white !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 .socialcalc-container .SocialCalc-spreadsheet {
   border: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Fix SocialCalc table spacing */
+.socialcalc-container table {
+  border-collapse: collapse !important;
+  border-spacing: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.socialcalc-container td, 
+.socialcalc-container th {
+  padding: 0 !important;
+  margin: 0 !important;
+  border-collapse: collapse !important;
+}
+
+/* Fix scrollbar and container issues */
+.socialcalc-container .TCmain {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.socialcalc-container .TCendcap {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Remove any excessive margins and padding from SocialCalc elements */
+.socialcalc-container div[style*="margin"],
+.socialcalc-container div[style*="padding"] {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.socialcalc-container .SocialCalc-toplevel {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.socialcalc-container .SocialCalc-editingpane {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Force grid to take full available space */
+.socialcalc-container .spreadsheetgrid,
+.socialcalc-container .SocialCalc-editingpanediv {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  overflow: auto !important;
+}
+
+/* Ensure the main SocialCalc table takes full width */
+.socialcalc-container .SocialCalc-spreadsheet-control {
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.socialcalc-container .SocialCalc-spreadsheet-control table {
+  width: 100% !important;
+  table-layout: fixed !important;
+  border-collapse: collapse !important;
+}
+
+/* Make the grid area expand to full width */
+.socialcalc-container .SocialCalc-grid-control {
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Ensure the editing pane takes full width */
+.socialcalc-container .SocialCalc-editingpane,
+.socialcalc-container .SocialCalc-editingpanediv {
+  width: 100% !important;
+  min-width: 100% !important;
+  max-width: 100% !important;
 }
 
 /* Ensure SocialCalc images can load properly */
 .socialcalc-container img {
   max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 .socialcalc-container [style*="background-image"] {
@@ -200,8 +303,43 @@
 .socialcalc-container .SocialCalc-workbook-controlpanel {
   background: #f0f8ff !important;
   border-bottom: 1px solid #ccc !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 .socialcalc-container .SocialCalc-workbook-sheet-bar {
   background: #e6f2ff !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Fix any overflow issues in the spreadsheet */
+.socialcalc-container .SocialCalc-spreadsheet-control {
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Ensure proper cell rendering */
+.socialcalc-container .SocialCalc-cell {
+  margin: 0 !important;
+  padding: 2px 4px !important;
+  box-sizing: border-box !important;
+}
+
+/* Fix grid lines */
+.socialcalc-container .SocialCalc-grid {
+  border-collapse: collapse !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Column and row headers */
+.socialcalc-container .defaultColname,
+.socialcalc-container .defaultSelectedColname,
+.socialcalc-container .defaultRowname,
+.socialcalc-container .defaultSelectedRowname {
+  margin: 0 !important;
+  padding: 2px 4px !important;
+  box-sizing: border-box !important;
 }
