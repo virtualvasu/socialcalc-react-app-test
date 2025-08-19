@@ -278,6 +278,29 @@
   background-repeat: no-repeat !important;
 }
 
+/* Style the icon toolbar buttons */
+.socialcalc-container .SocialCalc-workbook-controlpanel img {
+  border: 1px solid transparent !important;
+  border-radius: 3px !important;
+  padding: 2px !important;
+  margin: 1px !important;
+  transition: all 0.2s ease !important;
+  cursor: pointer !important;
+}
+
+.socialcalc-container .SocialCalc-workbook-controlpanel img:hover {
+  border-color: #ced4da !important;
+  background-color: rgba(255,255,255,0.8) !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
+  transform: scale(1.05) !important;
+}
+
+.socialcalc-container .SocialCalc-workbook-controlpanel img:active {
+  border-color: #adb5bd !important;
+  background-color: rgba(233,236,239,0.8) !important;
+  transform: scale(0.98) !important;
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
   .socialcalc-header {
@@ -301,16 +324,201 @@
 
 /* Additional styling for better visual integration */
 .socialcalc-container .SocialCalc-workbook-controlpanel {
-  background: #f0f8ff !important;
-  border-bottom: 1px solid #ccc !important;
+  background: linear-gradient(to bottom, #f8f9fa, #e9ecef) !important;
+  border-bottom: 1px solid #dee2e6 !important;
   margin: 0 !important;
+  padding: 12px 16px !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+  position: relative !important;
+}
+
+/* Add a subtle inner shadow for depth */
+.socialcalc-container .SocialCalc-workbook-controlpanel::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 1px !important;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.8), transparent) !important;
+  pointer-events: none !important;
+}
+
+/* Style the toolbar buttons */
+.socialcalc-container .SocialCalc-workbook-controlpanel span {
+  display: inline-block !important;
+  margin: 0 1px !important;
+  padding: 8px 16px !important;
+  background: linear-gradient(to bottom, #ffffff, #f8f9fa) !important;
+  border: 1px solid #dee2e6 !important;
+  border-radius: 6px !important;
+  color: #495057 !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease-in-out !important;
+  text-shadow: none !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06) !important;
+  position: relative !important;
+  user-select: none !important;
+  letter-spacing: 0.5px !important;
+  text-transform: uppercase !important;
+  font-size: 11px !important;
+}
+
+/* Hover effect for toolbar buttons */
+.socialcalc-container .SocialCalc-workbook-controlpanel span:hover {
+  background: linear-gradient(to bottom, #007cba, #0056b3) !important;
+  border-color: #0056b3 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 8px rgba(0, 124, 186, 0.3) !important;
+  transform: translateY(-1px) !important;
+  z-index: 10 !important;
+}
+
+/* Active/pressed state for toolbar buttons */
+.socialcalc-container .SocialCalc-workbook-controlpanel span:active {
+  background: linear-gradient(to bottom, #0056b3, #004085) !important;
+  border-color: #004085 !important;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.2), 0 1px 2px rgba(0,0,0,0.1) !important;
+  transform: translateY(0px) !important;
+  color: #ffffff !important;
+}
+
+/* Add a subtle border radius and spacing between tabs */
+.socialcalc-container .SocialCalc-workbook-controlpanel span:first-child {
+  margin-left: 4px !important;
+}
+
+.socialcalc-container .SocialCalc-workbook-controlpanel span:last-child {
+  margin-right: 4px !important;
+}
+
+/* Selected/active tab state (if applicable) */
+.socialcalc-container .SocialCalc-workbook-controlpanel span.selected,
+.socialcalc-container .SocialCalc-workbook-controlpanel span[style*="background-color: rgb(255, 255, 255)"] {
+  background: linear-gradient(to bottom, #007cba, #0056b3) !important;
+  border-color: #0056b3 !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 6px rgba(0, 124, 186, 0.4) !important;
+  font-weight: 700 !important;
+}
+
+/* Focus state for keyboard navigation */
+.socialcalc-container .SocialCalc-workbook-controlpanel span:focus {
+  outline: 2px solid #007cba !important;
+  outline-offset: 2px !important;
+}
+
+/* Disabled state */
+.socialcalc-container .SocialCalc-workbook-controlpanel span[disabled],
+.socialcalc-container .SocialCalc-workbook-controlpanel span.disabled {
+  background: #f8f9fa !important;
+  border-color: #e9ecef !important;
+  color: #adb5bd !important;
+  cursor: not-allowed !important;
+  opacity: 0.6 !important;
+}
+
+.socialcalc-container .SocialCalc-workbook-controlpanel span[disabled]:hover,
+.socialcalc-container .SocialCalc-workbook-controlpanel span.disabled:hover {
+  background: #f8f9fa !important;
+  border-color: #e9ecef !important;
+  color: #adb5bd !important;
+  transform: none !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06) !important;
+}
+
+/* Add subtle animation for smooth transitions */
+@keyframes tabPulse {
+  0% { box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+  50% { box-shadow: 0 2px 6px rgba(0, 124, 186, 0.2); }
+  100% { box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+}
+
+/* Add loading/processing state */
+.socialcalc-container .SocialCalc-workbook-controlpanel span.loading {
+  animation: tabPulse 1.5s ease-in-out infinite !important;
+  pointer-events: none !important;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+  .socialcalc-container .SocialCalc-workbook-controlpanel span {
+    padding: 6px 10px !important;
+    font-size: 10px !important;
+    margin: 0 0.5px !important;
+  }
+  
+  .socialcalc-container .SocialCalc-workbook-controlpanel {
+    padding: 8px 12px !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .socialcalc-container .SocialCalc-workbook-controlpanel span {
+    border-width: 2px !important;
+    font-weight: 700 !important;
+  }
+}
+
+/* Special styling for separator elements */
+.socialcalc-container .SocialCalc-workbook-controlpanel span[style*="background-color: rgb(238, 238, 238)"] {
+  background: #e9ecef !important;
+  border: none !important;
+  width: 2px !important;
+  height: 20px !important;
+  margin: 0 4px !important;
   padding: 0 !important;
+  border-radius: 1px !important;
 }
 
 .socialcalc-container .SocialCalc-workbook-sheet-bar {
-  background: #e6f2ff !important;
+  background: linear-gradient(to bottom, #e9ecef, #f8f9fa) !important;
   margin: 0 !important;
-  padding: 0 !important;
+  padding: 4px 8px !important;
+  border-top: 1px solid #ced4da !important;
+}
+
+/* Style the formula bar and input areas */
+.socialcalc-container input[type="text"],
+.socialcalc-container textarea,
+.socialcalc-container .SocialCalc-workbook-formulabar {
+  border: 1px solid #ced4da !important;
+  border-radius: 4px !important;
+  padding: 6px 8px !important;
+  font-size: 13px !important;
+  background-color: white !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.socialcalc-container input[type="text"]:focus,
+.socialcalc-container textarea:focus {
+  border-color: #007cba !important;
+  box-shadow: 0 0 0 2px rgba(0, 124, 186, 0.25) !important;
+  outline: none !important;
+}
+
+/* Style dropdown menus */
+.socialcalc-container select {
+  border: 1px solid #ced4da !important;
+  border-radius: 4px !important;
+  padding: 4px 8px !important;
+  background-color: white !important;
+  font-size: 13px !important;
+}
+
+/* Style the cell name box */
+.socialcalc-container .SocialCalc-workbook-cellname {
+  background: white !important;
+  border: 1px solid #ced4da !important;
+  border-radius: 4px !important;
+  padding: 4px 8px !important;
+  font-weight: 500 !important;
+  min-width: 60px !important;
+  text-align: center !important;
 }
 
 /* Fix any overflow issues in the spreadsheet */

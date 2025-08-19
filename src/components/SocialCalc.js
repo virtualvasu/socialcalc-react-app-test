@@ -258,16 +258,27 @@ const SocialCalc = () => {
                   const cellId = window.SocialCalc.crToCoord(colIndex + 1, rowIndex + 1);
                   const numValue = parseFloat(value);
                   
-                  sheet.cells[cellId] = {
-                    datavalue: isNaN(numValue) ? value : numValue,
-                    datatype: isNaN(numValue) ? 't' : 'n'
-                  };
+                  if (isNaN(numValue)) {
+                    // Text value
+                    sheet.cells[cellId] = {
+                      datavalue: value,
+                      datatype: 't',
+                      valuetype: 't'
+                    };
+                  } else {
+                    // Numeric value
+                    sheet.cells[cellId] = {
+                      datavalue: numValue,
+                      datatype: 'v',
+                      valuetype: 'n'
+                    };
+                  }
                 }
               });
             }
           });
           
-          spreadsheet.ScheduleRender();
+          spreadsheet.editor.ScheduleRender();
           console.log('CSV import successful');
         } catch (error) {
           console.error('Error importing CSV:', error);
@@ -314,7 +325,7 @@ const SocialCalc = () => {
         // Clear all cells
         spreadsheet.sheet.cells = {};
         spreadsheet.sheet.changes = {};
-        spreadsheet.ScheduleRender();
+        spreadsheet.editor.ScheduleRender();
         console.log('Spreadsheet cleared');
       } catch (error) {
         console.error('Error clearing spreadsheet:', error);
@@ -329,27 +340,27 @@ const SocialCalc = () => {
         const sheet = spreadsheet.sheet;
         
         // Headers
-        sheet.cells.A1 = { datavalue: 'Name', datatype: 't' };
-        sheet.cells.B1 = { datavalue: 'Age', datatype: 't' };
-        sheet.cells.C1 = { datavalue: 'Score', datatype: 't' };
+        sheet.cells.A1 = { datavalue: 'Name', datatype: 't', valuetype: 't' };
+        sheet.cells.B1 = { datavalue: 'Age', datatype: 't', valuetype: 't' };
+        sheet.cells.C1 = { datavalue: 'Score', datatype: 't', valuetype: 't' };
         
         // Data rows
-        sheet.cells.A2 = { datavalue: 'John Doe', datatype: 't' };
-        sheet.cells.B2 = { datavalue: 25, datatype: 'n' };
-        sheet.cells.C2 = { datavalue: 95, datatype: 'n' };
+        sheet.cells.A2 = { datavalue: 'John Doe', datatype: 't', valuetype: 't' };
+        sheet.cells.B2 = { datavalue: 25, datatype: 'v', valuetype: 'n' };
+        sheet.cells.C2 = { datavalue: 95, datatype: 'v', valuetype: 'n' };
         
-        sheet.cells.A3 = { datavalue: 'Jane Smith', datatype: 't' };
-        sheet.cells.B3 = { datavalue: 30, datatype: 'n' };
-        sheet.cells.C3 = { datavalue: 87, datatype: 'n' };
+        sheet.cells.A3 = { datavalue: 'Jane Smith', datatype: 't', valuetype: 't' };
+        sheet.cells.B3 = { datavalue: 30, datatype: 'v', valuetype: 'n' };
+        sheet.cells.C3 = { datavalue: 87, datatype: 'v', valuetype: 'n' };
         
-        sheet.cells.A4 = { datavalue: 'Bob Johnson', datatype: 't' };
-        sheet.cells.B4 = { datavalue: 28, datatype: 'n' };
-        sheet.cells.C4 = { datavalue: 92, datatype: 'n' };
+        sheet.cells.A4 = { datavalue: 'Bob Johnson', datatype: 't', valuetype: 't' };
+        sheet.cells.B4 = { datavalue: 28, datatype: 'v', valuetype: 'n' };
+        sheet.cells.C4 = { datavalue: 92, datatype: 'v', valuetype: 'n' };
         
         // Formula
-        sheet.cells.C5 = { datavalue: '=AVERAGE(C2:C4)', datatype: 'f' };
+        sheet.cells.C5 = { datavalue: '=AVERAGE(C2:C4)', datatype: 'f', valuetype: 'f' };
         
-        spreadsheet.ScheduleRender();
+        spreadsheet.editor.ScheduleRender();
         console.log('Sample data added');
       } catch (error) {
         console.error('Error adding sample data:', error);
