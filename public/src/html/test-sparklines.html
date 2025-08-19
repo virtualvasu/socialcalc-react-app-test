@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SocialCalc Sparklines Test</title>
+    <meta name="description" content="Test page for SocialCalc sparklines functionality">
+    
+    <!-- SocialCalc Core Files -->
+    <script src="../js/core/constants.js"></script>
+    <script src="../js/core/socialcalc-engine.js"></script>
+    <script src="../js/core/number-formatter.js"></script>
+    <script src="../js/core/formula-parser.js"></script>
+    
+    <!-- SocialCalc UI Components -->
+    <script src="../js/ui/table-editor.js"></script>
+    <script src="../js/ui/popup-manager.js"></script>
+    <script src="../js/ui/spreadsheet-control.js"></script>
+    
+    <!-- Third-party Libraries -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    
+    <!-- jQuery Browser Compatibility Shim for Legacy Plugins -->
+    <script>
+        // Add browser detection for legacy jQuery plugins
+        if (!jQuery.browser) {
+            jQuery.browser = {};
+            jQuery.browser.mozilla = /mozilla/.test(navigator.userAgent.toLowerCase()) && !/webkit/.test(navigator.userAgent.toLowerCase());
+            jQuery.browser.webkit = /webkit/.test(navigator.userAgent.toLowerCase());
+            jQuery.browser.opera = /opera/.test(navigator.userAgent.toLowerCase());
+            jQuery.browser.msie = /msie/.test(navigator.userAgent.toLowerCase()) || /trident/.test(navigator.userAgent.toLowerCase());
+        }
+    </script>
+    
+    <script src="../../lib/vendor/jquery/jquery.sparkline.min.js"></script>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../css/socialcalc.css">
+    <style>
+        body {
+            font-family: Verdana, Helvetica, Arial, sans-serif;
+            font-size: 14px;
+            margin: 0;
+            padding: 20px;
+            background-color: #fff;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        #tableeditor {
+            margin: 8px 0 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        
+        #msg {
+            padding: 10px;
+            cursor: pointer;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        
+        .smaller {
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>SocialCalc Sparklines Test</h1>
+            <p>Test environment for inline sparkline charts</p>
+        </header>
+        
+        <main>
+            <section id="tableeditor" role="application" aria-label="Spreadsheet with sparklines">
+                <p>Loading spreadsheet editor...</p>
+            </section>
+            
+            <aside id="msg" role="status" aria-live="polite">
+                &nbsp;
+            </aside>
+        </main>
+    </div>
+
+    <script>
+        // Initialize SocialCalc components when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            // Ensure required objects exist
+            if (!SocialCalc.Callbacks) SocialCalc.Callbacks = {};
+            if (!SocialCalc.Constants) SocialCalc.Constants = {};
+            if (!SocialCalc.Popup) SocialCalc.Popup = {};
+            
+            // Set correct image paths
+            SocialCalc.Constants.defaultImagePrefix = '../images/sc-';
+            if (SocialCalc.Popup) {
+                SocialCalc.Popup.imagePrefix = '../images/sc-';
+            }
+            
+            // Disable broadcast for local testing
+            SocialCalc.Callbacks.broadcast = (a, b) => {};
+            
+            // Define missing EvalUserScripts function
+            SocialCalc.EvalUserScripts = () => {};
+            
+            // Initialize spreadsheet control
+            const spreadsheet = new SocialCalc.SpreadsheetControl();
+            
+            // Initialize spreadsheet control in the DOM
+            spreadsheet.InitializeSpreadsheetControl('tableeditor');
+            spreadsheet.ExecuteCommand('redisplay', '');
+            
+            // Handle resize events
+            const handleResize = () => spreadsheet.DoOnResize();
+            window.addEventListener('resize', handleResize);
+            
+            // Initial resize
+            handleResize();
+            
+            // Setup message click handler
+            const msgElement = document.getElementById('msg');
+            msgElement.addEventListener('click', () => {
+                msgElement.innerHTML = '&nbsp;';
+            });
+        });
+    </script>
+</body>
+</html>

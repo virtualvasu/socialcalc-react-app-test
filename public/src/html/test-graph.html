@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SocialCalc Graph Test</title>
+    <meta name="description" content="Test page for SocialCalc graphing and charting functionality">
+    <!-- SocialCalc Core Files -->
+    <script src="../js/core/constants.js"></script>
+    <script src="../js/core/socialcalc-engine.js"></script>
+    <script src="../js/core/number-formatter.js"></script>
+    <script src="../js/core/formula-parser.js"></script>
+    
+    <!-- SocialCalc UI Components -->
+    <script src="../js/ui/table-editor.js"></script>
+    <script src="../js/ui/popup-manager.js"></script>
+    <script src="../js/ui/spreadsheet-control.js"></script>
+    
+    <!-- SocialCalc Visualization -->
+    <script src="../js/visualization/graph-manager.js"></script>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../css/socialcalc.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>SocialCalc Graph Test</h1>
+            <p>Test environment for graphing and charting functionality</p>
+        </header>
+        
+        <main>
+            <section id="tableeditor" role="application" aria-label="Spreadsheet with graphing">
+                <p>Loading spreadsheet editor...</p>
+            </section>
+            
+            <aside id="msg" role="status" aria-live="polite">
+                &nbsp;
+            </aside>
+        </main>
+    </div>
+
+
+    <script>
+        // Initialize SocialCalc graph test when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            // Ensure objects exist before setting properties
+            if (!SocialCalc.Constants) SocialCalc.Constants = {};
+            if (!SocialCalc.Popup) SocialCalc.Popup = {};
+            
+            // Configure SocialCalc callbacks
+            SocialCalc.EvalUserScripts = () => {};
+            SocialCalc.CallOutOnRenderCell = () => {};
+
+            // Set correct image paths
+            if (SocialCalc.Constants) {
+                SocialCalc.Constants.defaultImagePrefix = '../images/sc-';
+            }
+            if (SocialCalc.Popup) {
+                SocialCalc.Popup.imagePrefix = '../images/sc-';
+            }
+
+            // Initialize spreadsheet control
+            const spreadsheet = new SocialCalc.SpreadsheetControl();
+
+   // Set up the tabs we want
+
+   // Remove Audit
+
+   spreadsheet.tabs.splice(spreadsheet.tabnums.audit, 1);
+
+            // Reset tab numbers
+            spreadsheet.tabnums = {};
+            for (let i = 0; i < spreadsheet.tabs.length; i++) {
+                spreadsheet.tabnums[spreadsheet.tabs[i].name] = i;
+            }
+
+   // Add Plain
+
+   spreadsheet.tabnums.plain = spreadsheet.tabs.length;
+   spreadsheet.tabs.push({name: "plain", text: "Plain", html:
+      '<div id="%id.plaintools" style="display:none;">'+
+      ' <div style="%tbt.">&nbsp;</div>'+
+      '</div>',
+      view: "plain",
+            onclick: (s, t) => {
+                s.views.plain.element.innerHTML = s.CreateSheetHTML();
+            },
+      onclickFocus: true
+      });
+
+            spreadsheet.views.plain = {
+                name: 'plain',
+                divStyle: 'border:1px solid black;overflow:auto;',
+                html: 'Plain View'
+            };
+
+   // Add Graph
+
+   spreadsheet.tabnums.graph = spreadsheet.tabs.length;
+   spreadsheet.tabs.push({name: "graph", text: "Graph", html:
+      '<div id="%id.graphtools" style="display:none;">'+
+      ' <div style="%tbt.">'+
+      ' <table cellspacing="0" cellpadding="0"><tr>'+
+      '   <td style="vertical-align:middle;padding-right:32px;padding-left:16px;">'+
+      '    <div style="%tbt.">Cells to Graph</div>'+
+      '    <div id="%id.graphrange" style="font-weight:bold;">Not Set</div>'+
+      '   </td>'+
+      '  <td style="vertical-align:top;padding-right:32px;">'+
+      '   <div style="%tbt.">Set Cells To Graph</div>'+
+      '    <select id="%id.graphlist" size="1" onfocus="%s.CmdGotFocus(this);"><option selected>[select range]</option></select>'+
+      '   </td>'+
+      '   <td style="vertical-align:middle;padding-right:4px;">'+
+      '    <div style="%tbt.">Graph Type</div>'+
+      '     <select id="%id.graphtype" size="1" onchange="GraphChanged(this);" onfocus="%s.CmdGotFocus(this);"></select>'+
+      '     <input type="button" value="OK" onclick="GraphSetCells();" style="font-size:x-small;">'+
+      '    </div>'+
+      '   </td>'+
+      '   <td style="vertical-align:middle;padding-right:16px;">'+
+      '    <div style="%tbt.">&nbsp;</div>'+
+      '     <input id="%id.graphhelp" type="button" onclick="DoGraph(true);" value="Help" style="font-size:x-small;">'+
+      '    </div>'+
+      '   </td>'+
+	  '   <td style="vertical-align:middle;padding-right:16px;">'+
+      '     Min X <input id="%id.graphMinX" onchange="MinMaxChanged(this,0);" onfocus="%s.CmdGotFocus(this);" size=5/>'+
+      '     Max X <input id="%id.graphMaxX" onchange="MinMaxChanged(this,1);" onfocus="%s.CmdGotFocus(this);" size=5/><br/>'+
+      '     Min Y <input id="%id.graphMinY" onchange="MinMaxChanged(this,2);" onfocus="%s.CmdGotFocus(this);" size=5/>'+
+      '     Max Y <input id="%id.graphMaxY" onchange="MinMaxChanged(this,3);" onfocus="%s.CmdGotFocus(this);" size=5/>'+
+      '    </div>'+
+	  '   </td>'+
+      '  </tr></table>'+
+      ' </div>'+
+      '</div>',
+      view: "graph",
+      onclick: GraphOnClick,
+      onclickFocus: true
+      });
+
+   spreadsheet.views["graph"] = {name: "graph", divStyle: "overflow:auto;", values: {},
+      html: '<div style="padding:6px;">Graph View</div>'
+      };
+
+   spreadsheet.editor.SettingsCallbacks.graph = {save: GraphSave, load: GraphLoad};
+      
+            spreadsheet.InitializeSpreadsheetControl("tableeditor", 0, 0, 0);
+
+            const savestr = "";
+            const parts = spreadsheet.DecodeSpreadsheetSave(savestr);
+            if (parts) {
+                if (parts.sheet) {
+                    spreadsheet.sheet.ResetSheet();
+                    spreadsheet.ParseSheetSave(savestr.substring(parts.sheet.start, parts.sheet.end));
+                }
+                if (parts.edit) {
+                    spreadsheet.editor.LoadEditorSettings(savestr.substring(parts.edit.start, parts.edit.end));
+                }
+                if (parts.startupmacro) {
+                    spreadsheet.editor.EditorScheduleSheetCommands(savestr.substring(parts.startupmacro.start, parts.startupmacro.end), false, true);
+                }
+            }
+            if (spreadsheet.sheet.attribs.recalc === "off") {
+                spreadsheet.sheet.attribs.needsrecalc = "yes"; // default turn it on
+                spreadsheet.ExecuteCommand('redisplay', '');
+            } else {
+                spreadsheet.ExecuteCommand('recalc', '');
+            }
+        });
+    </script>
+ </body>
+</html>

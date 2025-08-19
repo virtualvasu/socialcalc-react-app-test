@@ -1,70 +1,126 @@
-# Getting Started with Create React App
+# React SocialCalc Application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A modern React application that integrates the modernized SocialCalc spreadsheet engine, providing a powerful web-based spreadsheet editor with collaborative features.
+
+## Features
+
+- **Modern React Interface**: Clean, responsive UI built with React
+- **SocialCalc Integration**: Full integration with the modernized SocialCalc engine
+- **CSV Import/Export**: Easy data import and export functionality
+- **Sample Data**: Quick sample data insertion for testing
+- **Collaborative Ready**: Built-in support for real-time collaboration
+- **Responsive Design**: Works on desktop and mobile devices
+
+## Quick Start
+
+### Prerequisites
+
+- Node.js (v14 or higher)
+- npm or yarn
+
+### Installation
+
+1. Navigate to the React app directory:
+   ```bash
+   cd socialcalc-react-app
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Start the development server:
+   ```bash
+   npm start
+   ```
+
+4. Open your browser to `http://localhost:3000` (or the port shown in terminal)
+
+## Usage
+
+### Basic Spreadsheet Operations
+
+1. **Cell Editing**: Click on any cell to start editing
+2. **Formulas**: Enter formulas starting with `=` (e.g., `=SUM(A1:A10)`, `=AVERAGE(B1:B5)`)
+3. **Navigation**: Use arrow keys or click to navigate between cells
+4. **Data Entry**: Type text or numbers directly into cells
+
+### Available Actions
+
+- **Add Sample Data**: Populate the spreadsheet with example data
+- **Clear All**: Remove all data from the spreadsheet
+- **Export CSV**: Download the current spreadsheet as a CSV file
+- **Import CSV**: Upload and load a CSV file into the spreadsheet
+
+### Supported Formulas
+
+The SocialCalc engine supports spreadsheet functions like:
+- **Math**: `SUM`, `AVERAGE`, `COUNT`, `MIN`, `MAX`
+- **Logical**: `IF`, `AND`, `OR`, `NOT`
+- **Text**: `CONCATENATE`, `LEFT`, `RIGHT`, `MID`, `LEN`
+- **Date**: `TODAY`, `NOW`, `DATE`, `YEAR`, `MONTH`, `DAY`
+
+## Project Structure
+
+```
+socialcalc-react-app/
+├── public/
+│   ├── src/              # SocialCalc source files
+│   │   ├── js/           # JavaScript modules
+│   │   ├── css/          # Stylesheets
+│   │   └── images/       # UI assets
+│   └── lib/              # Third-party libraries
+├── src/
+│   ├── components/
+│   │   ├── SocialCalc.js # Main spreadsheet component
+│   │   └── SocialCalc.css # Component styles
+│   ├── App.js            # Main React application
+│   └── App.css           # Application styles
+└── package.json
+```
+
+## Integration with SocialCalc
+
+This React application integrates with the modernized SocialCalc project located in the parent directory (`../socialcalc-modernized-v2`). The SocialCalc source files are copied to the `public/` directory to be accessible by the browser.
 
 ## Available Scripts
 
-In the project directory, you can run:
-
 ### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Runs the app in development mode. Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 ### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Launches the test runner in interactive watch mode.
 
 ### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Builds the app for production to the `build` folder. The build is optimized for best performance.
 
 ### `npm run eject`
 
 **Note: this is a one-way operation. Once you `eject`, you can't go back!**
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Browser Compatibility
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- Chrome 60+
+- Firefox 55+
+- Safari 12+
+- Edge 79+
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Contributing
 
-## Learn More
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## License
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+This project integrates with SocialCalc (MIT License) and the React wrapper is also MIT licensed.
 
-### Code Splitting
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Built with React and the modernized SocialCalc engine.

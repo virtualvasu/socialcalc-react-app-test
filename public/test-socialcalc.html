@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SocialCalc Test</title>
+    
+    <!-- SocialCalc Dependencies -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="/src/js/core/constants.js"></script>
+    <script src="/src/js/core/number-formatter.js"></script>
+    <script src="/src/js/core/formula-parser.js"></script>
+    <script src="/src/js/core/socialcalc-engine.js"></script>
+    <script src="/src/js/ui/spreadsheet-control.js"></script>
+    <script src="/src/js/ui/table-editor.js"></script>
+    <script src="/src/js/ui/popup-manager.js"></script>
+    <script src="/src/js/ui/viewer.js"></script>
+    <script src="/src/js/workbook/workbook.js"></script>
+    <script src="/src/js/workbook/workbook-control.js"></script>
+    <script src="/src/js/network/updater.js"></script>
+    
+    <!-- SocialCalc Styles -->
+    <link rel="stylesheet" href="/src/css/socialcalc.css" />
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #spreadsheet-container {
+            border: 1px solid #ccc;
+            width: 800px;
+            height: 500px;
+            margin: 20px 0;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .loading { background: #f0f8ff; border: 1px solid #ccc; }
+        .success { background: #f0fff0; border: 1px solid #90ee90; }
+        .error { background: #ffe4e1; border: 1px solid #ff6b6b; }
+    </style>
+</head>
+
+<body>
+    <h1>SocialCalc Basic Test</h1>
+    
+    <div id="status" class="status loading">Loading SocialCalc...</div>
+    
+    <div id="spreadsheet-container"></div>
+    
+    <div>
+        <button onclick="addTestData()" disabled id="testBtn">Add Test Data</button>
+        <button onclick="logInfo()" disabled id="infoBtn">Log Info</button>
+    </div>
+    
+    <script>
+        let spreadsheet = null;
+        
+        function updateStatus(message, type = 'loading') {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = 'status ' + type;
+        }
+        
+        function enableButtons() {
+            document.getElementById('testBtn').disabled = false;
+            document.getElementById('infoBtn').disabled = false;
+        }
+        
+        function addTestData() {
+            if (spreadsheet && spreadsheet.sheet) {
+                try {
+                    const sheet = spreadsheet.sheet;
+                    sheet.cells.A1 = { datavalue: 'Hello', datatype: 't' };
+                    sheet.cells.B1 = { datavalue: 'World', datatype: 't' };
+                    sheet.cells.A2 = { datavalue: 10, datatype: 'n' };
+                    sheet.cells.B2 = { datavalue: 20, datatype: 'n' };
+                    sheet.cells.C2 = { datavalue: '=A2+B2', datatype: 'f' };
+                    
+                    spreadsheet.ScheduleRender();
+                    updateStatus('Test data added successfully!', 'success');
+                } catch (error) {
+                    updateStatus('Error adding test data: ' + error.message, 'error');
+                    console.error('Error adding test data:', error);
+                }
+            }
+        }
+        
+        function logInfo() {
+            console.log('SocialCalc object:', window.SocialCalc);
+            console.log('Spreadsheet instance:', spreadsheet);
+            if (spreadsheet) {
+                console.log('Sheet:', spreadsheet.sheet);
+                console.log('Cells:', spreadsheet.sheet ? spreadsheet.sheet.cells : 'No sheet');
+            }
+        }
+        
+        function initializeSocialCalc() {
+            console.log('Checking SocialCalc availability...');
+            console.log('SocialCalc exists:', !!window.SocialCalc);
+            console.log('SpreadsheetControl exists:', !!window.SocialCalc?.SpreadsheetControl);
+            
+            if (window.SocialCalc && window.SocialCalc.SpreadsheetControl) {
+                try {
+                    updateStatus('Creating SocialCalc instance...');
+                    
+                    // Disable broadcasting to prevent errors
+                    if (window.SocialCalc.Callbacks) {
+                        window.SocialCalc.Callbacks.broadcast = function() {};
+                    }
+                    
+                    spreadsheet = new window.SocialCalc.SpreadsheetControl();
+                    
+                    const container = document.getElementById('spreadsheet-container');
+                    if (container && spreadsheet) {
+                        updateStatus('Initializing spreadsheet...');
+                        
+                        spreadsheet.InitializeSpreadsheetControl(container, 0, 0, 0);
+                        
+                        updateStatus('SocialCalc initialized successfully!', 'success');
+                        enableButtons();
+                        console.log('SocialCalc initialized successfully');
+                    } else {
+                        throw new Error('Container or spreadsheet not available');
+                    }
+                } catch (error) {
+                    updateStatus('Error initializing SocialCalc: ' + error.message, 'error');
+                    console.error('Error initializing SocialCalc:', error);
+                }
+            } else {
+                updateStatus('SocialCalc not loaded yet, retrying...', 'loading');
+                setTimeout(initializeSocialCalc, 500);
+            }
+        }
+        
+        // Start initialization when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM loaded, starting SocialCalc initialization...');
+            setTimeout(initializeSocialCalc, 1000); // Give scripts time to load
+        });
+    </script>
+</body>
+</html>
