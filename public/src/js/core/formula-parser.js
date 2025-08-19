@@ -224,23 +224,23 @@ SocialCalc.Formula.TypeLookupTable = {
  *   - {string} opcode - Single character version of operator for precedence table
  * 
  * @example
- * const tokens = SocialCalc.Formula.ParseFormulaIntoTokens("=A1+B2*3");
+ * let tokens = SocialCalc.Formula.ParseFormulaIntoTokens("=A1+B2*3");
  * // Returns array of token objects representing the parsed formula
  */
 SocialCalc.Formula.ParseFormulaIntoTokens = function(line) {
    let i, ch, chclass, haddecimal, last_token, last_token_type, last_token_text, t;
 
-   const scf = SocialCalc.Formula;
-   const scc = SocialCalc.Constants;
-   const parsestate = scf.ParseState;
-   const tokentype = scf.TokenType;
-   const charclass = scf.CharClass;
-   const charclasstable = scf.CharClassTable;
-   const uppercasetable = scf.UpperCaseTable; // much faster than toUpperCase function
-   const pushtoken = scf.ParsePushToken;
-   const coordregex = /^\$?[A-Z]{1,2}\$?[1-9]\d*$/i;
+   let scf = SocialCalc.Formula;
+   let scc = SocialCalc.Constants;
+   let parsestate = scf.ParseState;
+   let tokentype = scf.TokenType;
+   let charclass = scf.CharClass;
+   let charclasstable = scf.CharClassTable;
+   let uppercasetable = scf.UpperCaseTable; // much faster than toUpperCase function
+   let pushtoken = scf.ParsePushToken;
+   let coordregex = /^\$?[A-Z]{1,2}\$?[1-9]\d*$/i;
 
-   const parseinfo = [];
+   let parseinfo = [];
    let str = "";
    let state = 0;
    haddecimal = false;
@@ -490,17 +490,17 @@ SocialCalc.Formula.ParsePushToken = function(parseinfo, ttext, ttype, topcode) {
  *   - {string} error - Error text if calculation failed
  * 
  * @example
- * const result = SocialCalc.Formula.evaluate_parsed_formula(tokens, sheet, false);
+ * let result = SocialCalc.Formula.evaluate_parsed_formula(tokens, sheet, false);
  * // Returns: {value: 42, type: "n", error: ""}
  */
 SocialCalc.Formula.evaluate_parsed_formula = function(parseinfo, sheet, allowrangereturn) {
    let result;
 
-   const scf = SocialCalc.Formula;
-   const tokentype = scf.TokenType;
+   let scf = SocialCalc.Formula;
+   let tokentype = scf.TokenType;
 
    let revpolish;
-   const parsestack = [];
+   let parsestack = [];
 
    let errortext = "";
 
@@ -524,22 +524,22 @@ SocialCalc.Formula.evaluate_parsed_formula = function(parseinfo, sheet, allowran
  *                                  or error string if conversion fails
  * 
  * @example
- * const rpn = SocialCalc.Formula.ConvertInfixToPolish(tokens);
+ * let rpn = SocialCalc.Formula.ConvertInfixToPolish(tokens);
  * // Returns: [0, 2, 1] for "A1 + B2" (indices to tokens in RPN order)
  */
 SocialCalc.Formula.ConvertInfixToPolish = function(parseinfo) {
-   const scf = SocialCalc.Formula;
-   const scc = SocialCalc.Constants;
-   const tokentype = scf.TokenType;
-   const token_precedence = scf.TokenPrecedence;
+   let scf = SocialCalc.Formula;
+   let scc = SocialCalc.Constants;
+   let tokentype = scf.TokenType;
+   let token_precedence = scf.TokenPrecedence;
 
-   const revpolish = [];
-   const parsestack = [];
+   let revpolish = [];
+   let parsestack = [];
 
    let errortext = "";
 
    /** @type {number} Marker for function start in reverse polish notation */
-   const function_start = -1;
+   let function_start = -1;
 
    let i, pii, ttype, ttext, tprecedence, tstackprecedence;
 
@@ -643,29 +643,29 @@ SocialCalc.Formula.ConvertInfixToPolish = function(parseinfo) {
  *   - {string} error - Error text if calculation failed
  * 
  * @example
- * const result = SocialCalc.Formula.EvaluatePolish(parseinfo, rpn, sheet, false);
+ * let result = SocialCalc.Formula.EvaluatePolish(parseinfo, rpn, sheet, false);
  * // Returns: {value: 42, type: "n", error: ""}
  */
 SocialCalc.Formula.EvaluatePolish = function(parseinfo, revpolish, sheet, allowrangereturn) {
-   const scf = SocialCalc.Formula;
-   const scc = SocialCalc.Constants;
-   const tokentype = scf.TokenType;
-   const lookup_result_type = scf.LookupResultType;
-   const typelookup = scf.TypeLookupTable;
-   const operand_as_number = scf.OperandAsNumber;
-   const operand_as_text = scf.OperandAsText;
-   const operand_value_and_type = scf.OperandValueAndType;
-   const operands_as_coord_on_sheet = scf.OperandsAsCoordOnSheet;
-   const format_number_for_display = SocialCalc.format_number_for_display || function(v, t, f) {return v+"";};
+   let scf = SocialCalc.Formula;
+   let scc = SocialCalc.Constants;
+   let tokentype = scf.TokenType;
+   let lookup_result_type = scf.LookupResultType;
+   let typelookup = scf.TypeLookupTable;
+   let operand_as_number = scf.OperandAsNumber;
+   let operand_as_text = scf.OperandAsText;
+   let operand_value_and_type = scf.OperandValueAndType;
+   let operands_as_coord_on_sheet = scf.OperandsAsCoordOnSheet;
+   let format_number_for_display = SocialCalc.format_number_for_display || function(v, t, f) {return v+"";};
 
    let errortext = "";
    /** @type {number} Marker for function start in evaluation stack */
-   const function_start = -1;
+   let function_start = -1;
    /** @type {Object} Standard error object for missing operands */
-   const missingOperandError = {value: "", type: "e#VALUE!", error: scc.s_parseerrmissingoperand};
+   let missingOperandError = {value: "", type: "e#VALUE!", error: scc.s_parseerrmissingoperand};
 
    /** @type {Array<Object>} Stack of operands during evaluation */
-   const operand = [];
+   let operand = [];
    
    /**
     * @function PushOperand
@@ -673,7 +673,7 @@ SocialCalc.Formula.EvaluatePolish = function(parseinfo, revpolish, sheet, allowr
     * @param {string} t - Type of the operand
     * @param {*} v - Value of the operand
     */
-   const PushOperand = function(t, v) {operand.push({type: t, value: v});};
+   let PushOperand = function(t, v) {operand.push({type: t, value: v});};
 
    let i, rii, prii, ttype, ttext, value1, value2, tostype, tostype2, resulttype, valuetype, cond, vmatch, smatch;
 
@@ -920,7 +920,7 @@ SocialCalc.Formula.EvaluatePolish = function(parseinfo, revpolish, sheet, allowr
  * @returns {string} The resulting type after the operation
  * 
  * @example
- * const resultType = SocialCalc.Formula.LookupResultType("n", "t", typelookup.plus);
+ * let resultType = SocialCalc.Formula.LookupResultType("n", "t", typelookup.plus);
  * // Returns appropriate type based on lookup table
  */
 SocialCalc.Formula.LookupResultType = function(type1, type2, typelookup) {
@@ -971,16 +971,16 @@ SocialCalc.Formula.LookupResultType = function(type1, type2, typelookup) {
  *   - {string} [error] - Error message if operation failed
  * 
  * @example
- * const stackTop = SocialCalc.Formula.TopOfStackValueAndType(sheet, operandStack);
+ * let stackTop = SocialCalc.Formula.TopOfStackValueAndType(sheet, operandStack);
  * // Returns: {value: 42, type: "n"} and pops the stack
  */
 SocialCalc.Formula.TopOfStackValueAndType = function(sheet, operand) {
    let cellvtype, cell, pos, coordsheet;
-   const scf = SocialCalc.Formula;
+   let scf = SocialCalc.Formula;
 
-   const result = {type: "", value: ""};
+   let result = {type: "", value: ""};
 
-   const stacklen = operand.length;
+   let stacklen = operand.length;
 
    if (!stacklen) { // make sure something is there
       result.error = SocialCalc.Constants.s_InternalError+"no operand on stack";
@@ -1013,12 +1013,12 @@ SocialCalc.Formula.TopOfStackValueAndType = function(sheet, operand) {
  *   - {string} type - The type of the operand
  * 
  * @example
- * const numOperand = SocialCalc.Formula.OperandAsNumber(sheet, operandStack);
+ * let numOperand = SocialCalc.Formula.OperandAsNumber(sheet, operandStack);
  * // Returns: {value: 42, type: "n"}
  */
 SocialCalc.Formula.OperandAsNumber = function(sheet, operand) {
    let t, valueinfo;
-   const operandinfo = SocialCalc.Formula.OperandValueAndType(sheet, operand);
+   let operandinfo = SocialCalc.Formula.OperandValueAndType(sheet, operand);
 
    t = operandinfo.type.charAt(0);
 
@@ -1059,12 +1059,12 @@ SocialCalc.Formula.OperandAsNumber = function(sheet, operand) {
  *   - {string} type - The type of the operand (typically "t" for text)
  * 
  * @example
- * const textOperand = SocialCalc.Formula.OperandAsText(sheet, operandStack);
+ * let textOperand = SocialCalc.Formula.OperandAsText(sheet, operandStack);
  * // Returns: {value: "Hello", type: "t"}
  */
 SocialCalc.Formula.OperandAsText = function(sheet, operand) {
    let t, valueinfo;
-   const operandinfo = SocialCalc.Formula.OperandValueAndType(sheet, operand);
+   let operandinfo = SocialCalc.Formula.OperandValueAndType(sheet, operand);
 
    t = operandinfo.type.charAt(0);
 
@@ -1103,16 +1103,16 @@ SocialCalc.Formula.OperandAsText = function(sheet, operand) {
  *   - {string} [error] - Error message if operation failed
  * 
  * @example
- * const result = SocialCalc.Formula.OperandValueAndType(sheet, operandStack);
+ * let result = SocialCalc.Formula.OperandValueAndType(sheet, operandStack);
  * // Returns: {value: 42, type: "n"} for a numeric cell value
  */
 SocialCalc.Formula.OperandValueAndType = function(sheet, operand) {
    let cellvtype, cell, pos, coordsheet;
-   const scf = SocialCalc.Formula;
+   let scf = SocialCalc.Formula;
 
-   const result = {type: "", value: ""};
+   let result = {type: "", value: ""};
 
-   const stacklen = operand.length;
+   let stacklen = operand.length;
 
    if (!stacklen) { // make sure something is there
       result.error = SocialCalc.Constants.s_InternalError+"no operand on stack";
@@ -1180,15 +1180,15 @@ SocialCalc.Formula.OperandValueAndType = function(sheet, operand) {
  *   - {string} type - "coord" if successful, "e#REF!" if error
  * 
  * @example
- * const coord = SocialCalc.Formula.OperandAsCoord(sheet, operandStack);
+ * let coord = SocialCalc.Formula.OperandAsCoord(sheet, operandStack);
  * // Returns: {value: "A1", type: "coord"}
  */
 SocialCalc.Formula.OperandAsCoord = function(sheet, operand) {
-   const scf = SocialCalc.Formula;
+   let scf = SocialCalc.Formula;
 
-   const result = {type: "", value: ""};
+   let result = {type: "", value: ""};
 
-   const stacklen = operand.length;
+   let stacklen = operand.length;
 
    result.value = operand[stacklen-1].value; // get top of stack
    result.type = operand[stacklen-1].type;
@@ -1224,16 +1224,16 @@ SocialCalc.Formula.OperandAsCoord = function(sheet, operand) {
  *   - {string} [error] - Error message if sheet unavailable
  * 
  * @example
- * const result = SocialCalc.Formula.OperandsAsCoordOnSheet(sheet, operandStack);
+ * let result = SocialCalc.Formula.OperandsAsCoordOnSheet(sheet, operandStack);
  * // Returns: {value: "A1!Sheet2", type: "coord"}
  */
 SocialCalc.Formula.OperandsAsCoordOnSheet = function(sheet, operand) {
    let sheetname, othersheet, pos1, pos2;
-   const value1 = {};
-   const result = {};
-   const scf = SocialCalc.Formula;
+   let value1 = {};
+   let result = {};
+   let scf = SocialCalc.Formula;
 
-   const stacklen = operand.length;
+   let stacklen = operand.length;
    value1.value = operand[stacklen-1].value; // get top of stack - coord or name
    value1.type = operand[stacklen-1].type;
    operand.pop(); // we have data - pop stack
@@ -1287,16 +1287,16 @@ SocialCalc.Formula.OperandsAsCoordOnSheet = function(sheet, operand) {
  *   - {string} [errortext] - Error message if sheet unavailable
  * 
  * @example
- * const range = SocialCalc.Formula.OperandsAsRangeOnSheet(sheet, operandStack);
+ * let range = SocialCalc.Formula.OperandsAsRangeOnSheet(sheet, operandStack);
  * // Returns: {value: "A1!Sheet1|B2|", type: "range"}
  */
 SocialCalc.Formula.OperandsAsRangeOnSheet = function(sheet, operand) {
    let value1, othersheet, pos1, pos2;
-   const value2 = {};
-   const scf = SocialCalc.Formula;
-   const scc = SocialCalc.Constants;
+   let value2 = {};
+   let scf = SocialCalc.Formula;
+   let scc = SocialCalc.Constants;
 
-   const stacklen = operand.length;
+   let stacklen = operand.length;
    value2.value = operand[stacklen-1].value; // get top of stack - coord or name for "right" side
    value2.type = operand[stacklen-1].type;
    operand.pop(); // we have data - pop stack
@@ -1344,17 +1344,17 @@ SocialCalc.Formula.OperandsAsRangeOnSheet = function(sheet, operand) {
  *   - {string} [error] - Error message if sheet name missing
  * 
  * @example
- * const sheetName = SocialCalc.Formula.OperandAsSheetName(sheet, operandStack);
+ * let sheetName = SocialCalc.Formula.OperandAsSheetName(sheet, operandStack);
  * // Returns: {value: "Sheet2", type: "t"}
  */
 SocialCalc.Formula.OperandAsSheetName = function(sheet, operand) {
    let nvalue, cell;
 
-   const scf = SocialCalc.Formula;
+   let scf = SocialCalc.Formula;
 
-   const result = {type: "", value: ""};
+   let result = {type: "", value: ""};
 
-   const stacklen = operand.length;
+   let stacklen = operand.length;
 
    result.value = operand[stacklen-1].value; // get top of stack
    result.type = operand[stacklen-1].type;
@@ -1407,13 +1407,13 @@ SocialCalc.Formula.OperandAsSheetName = function(sheet, operand) {
  *   - {string} [error] - Error message if lookup failed
  * 
  * @example
- * const result = SocialCalc.Formula.LookupName(sheet, "MyRange");
+ * let result = SocialCalc.Formula.LookupName(sheet, "MyRange");
  * // Returns: {value: "A1|B3|", type: "range"} for a range definition
  */
 SocialCalc.Formula.LookupName = function(sheet, name) {
    let pos, specialc, parseinfo;
-   const names = sheet.names;
-   const value = {};
+   let names = sheet.names;
+   let value = {};
    let startedwalk = false;
 
    if (names[name.toUpperCase()]) { // is name defined?
@@ -1482,12 +1482,12 @@ SocialCalc.Formula.LookupName = function(sheet, name) {
  *   - {string} type - Always "coord"
  * 
  * @example
- * const nextCoord = SocialCalc.Formula.StepThroughRangeDown(operand, "A1|B2|0");
+ * let nextCoord = SocialCalc.Formula.StepThroughRangeDown(operand, "A1|B2|0");
  * // Returns: {value: "A1", type: "coord"} and updates operand stack
  */
 SocialCalc.Formula.StepThroughRangeDown = function(operand, rangevalue) {
    let value1, value2, sequence, pos1, pos2, sheet1, rp, c, r, count;
-   const scf = SocialCalc.Formula;
+   let scf = SocialCalc.Formula;
 
    pos1 = rangevalue.indexOf("|");
    pos2 = rangevalue.indexOf("|", pos1+1);
@@ -1545,13 +1545,13 @@ SocialCalc.Formula.StepThroughRangeDown = function(operand, rangevalue) {
  *   Returns null if any errors occur.
  * 
  * @example
- * const parts = SocialCalc.Formula.DecodeRangeParts(sheet, "A1|C3|");
+ * let parts = SocialCalc.Formula.DecodeRangeParts(sheet, "A1|C3|");
  * // Returns: {sheetdata: sheet, sheetname: "", col1num: 1, ncols: 3, row1num: 1, nrows: 3}
  */
 SocialCalc.Formula.DecodeRangeParts = function(sheetdata, range) {
    let value1, value2, pos1, pos2, sheet1, coordsheetdata, rp;
 
-   const scf = SocialCalc.Formula;
+   let scf = SocialCalc.Formula;
 
    pos1 = range.indexOf("|");
    pos2 = range.indexOf("|", pos1+1);
@@ -1639,12 +1639,12 @@ SocialCalc.Formula.FunctionArgDefs = {};
  * @returns {string} Error text if function call failed, empty string if successful
  * 
  * @example
- * const error = SocialCalc.Formula.CalculateFunction("SUM", operand, sheet);
+ * let error = SocialCalc.Formula.CalculateFunction("SUM", operand, sheet);
  * // Returns: "" if successful, error message if failed
  */
 SocialCalc.Formula.CalculateFunction = function(fname, operand, sheet) {
    let fobj, foperand, ffunc, argnum, ttext;
-   const scf = SocialCalc.Formula;
+   let scf = SocialCalc.Formula;
    let ok = 1;
    let errortext = "";
 
@@ -1717,7 +1717,7 @@ SocialCalc.Formula.PushOperand = function(operand, t, v) {
  */
 SocialCalc.Formula.CopyFunctionArgs = function(operand, foperand) {
    let fobj, ffunc, argnum;
-   const scf = SocialCalc.Formula;
+   let scf = SocialCalc.Formula;
    let ok = 1;
    let errortext = null;
 
@@ -1739,11 +1739,11 @@ SocialCalc.Formula.CopyFunctionArgs = function(operand, foperand) {
  * @returns {string} Error text including the function name
  * 
  * @example
- * const error = SocialCalc.Formula.FunctionArgsError("SUM", operand);
+ * let error = SocialCalc.Formula.FunctionArgsError("SUM", operand);
  * // Returns: "Incorrect arguments to function SUM. " and pushes error to stack
  */
 SocialCalc.Formula.FunctionArgsError = function(fname, operand) {
-   const errortext = SocialCalc.Constants.s_calcerrincorrectargstofunction+" " + fname + ". ";
+   let errortext = SocialCalc.Constants.s_calcerrincorrectargstofunction+" " + fname + ". ";
    SocialCalc.Formula.PushOperand(operand, "e#VALUE!", errortext);
 
    return errortext;
@@ -1761,7 +1761,7 @@ SocialCalc.Formula.FunctionArgsError = function(fname, operand) {
  * @returns {string} The error text that was pushed
  * 
  * @example
- * const error = SocialCalc.Formula.FunctionSpecificError("SQRT", operand, "e#NUM!", "Negative number");
+ * let error = SocialCalc.Formula.FunctionSpecificError("SQRT", operand, "e#NUM!", "Negative number");
  * // Pushes custom error to stack and returns error text
  */
 SocialCalc.Formula.FunctionSpecificError = function(fname, operand, errortype, errortext) {
@@ -1780,7 +1780,7 @@ SocialCalc.Formula.FunctionSpecificError = function(fname, operand, errortype, e
  * @returns {boolean} True if v.type is an error (and pushed to stack), false otherwise
  * 
  * @example
- * const hasError = SocialCalc.Formula.CheckForErrorValue(operand, {type: "e#DIV/0!", value: 0});
+ * let hasError = SocialCalc.Formula.CheckForErrorValue(operand, {type: "e#DIV/0!", value: 0});
  * // Returns: true and pushes error to operand stack
  */
 SocialCalc.Formula.CheckForErrorValue = function(operand, v) {
@@ -1810,8 +1810,8 @@ SocialCalc.Formula.CheckForErrorValue = function(operand, v) {
  * // Initializes function argument definitions and classes from constants
  */
 SocialCalc.Formula.FillFunctionInfo = function() {
-   const scf = SocialCalc.Formula;
-   const scc = SocialCalc.Constants;
+   let scf = SocialCalc.Formula;
+   let scc = SocialCalc.Constants;
 
    let fname, f, classes, cname, i;
 
@@ -1862,15 +1862,15 @@ SocialCalc.Formula.FillFunctionInfo = function() {
  * @returns {string} String representation of the function's arguments
  * 
  * @example
- * const argStr = SocialCalc.Formula.FunctionArgString("SUM");
+ * let argStr = SocialCalc.Formula.FunctionArgString("SUM");
  * // Returns: "v1, v2, ..." or specific argument description
  */
 SocialCalc.Formula.FunctionArgString = function(fname) {
-   const scf = SocialCalc.Formula;
-   const fdata = scf.FunctionList[fname];
+   let scf = SocialCalc.Formula;
+   let fdata = scf.FunctionList[fname];
    let nargs, i, str;
 
-   const adef = fdata[2];
+   let adef = fdata[2];
 
    if (!adef) {
       nargs = fdata[1];
@@ -1928,10 +1928,10 @@ SocialCalc.Formula.FunctionArgString = function(fname) {
 SocialCalc.Formula.SeriesFunctions = function(fname, operand, foperand, sheet) {
    let value1, t, v1;
 
-   const scf = SocialCalc.Formula;
-   const operand_value_and_type = scf.OperandValueAndType;
-   const lookup_result_type = scf.LookupResultType;
-   const typelookupplus = scf.TypeLookupTable.plus;
+   let scf = SocialCalc.Formula;
+   let operand_value_and_type = scf.OperandValueAndType;
+   let lookup_result_type = scf.LookupResultType;
+   let typelookupplus = scf.TypeLookupTable.plus;
 
    /**
     * @function PushOperand
@@ -1939,7 +1939,7 @@ SocialCalc.Formula.SeriesFunctions = function(fname, operand, foperand, sheet) {
     * @param {string} t - Type of operand
     * @param {*} v - Value of operand
     */
-   const PushOperand = function(t, v) {operand.push({type: t, value: v});};
+   let PushOperand = function(t, v) {operand.push({type: t, value: v});};
 
    let sum = 0;
    let resulttypesum = "";
@@ -2111,10 +2111,10 @@ SocialCalc.Formula.DSeriesFunctions = function(fname, operand, foperand, sheet) 
    let testok, criteriacr, criteria, testcol, testcr;
    let t;
 
-   const scf = SocialCalc.Formula;
-   const operand_value_and_type = scf.OperandValueAndType;
-   const lookup_result_type = scf.LookupResultType;
-   const typelookupplus = scf.TypeLookupTable.plus;
+   let scf = SocialCalc.Formula;
+   let operand_value_and_type = scf.OperandValueAndType;
+   let lookup_result_type = scf.LookupResultType;
+   let typelookupplus = scf.TypeLookupTable.plus;
 
    /**
     * @function PushOperand
@@ -2122,7 +2122,7 @@ SocialCalc.Formula.DSeriesFunctions = function(fname, operand, foperand, sheet) 
     * @param {string} t - Type of operand
     * @param {*} v - Value of operand
     */
-   const PushOperand = function(t, v) {operand.push({type: t, value: v});};
+   let PushOperand = function(t, v) {operand.push({type: t, value: v});};
 
    value1 = {};
 
@@ -2358,7 +2358,7 @@ SocialCalc.Formula.FunctionList["DVARP"] = [SocialCalc.Formula.DSeriesFunctions,
  * @returns {number} Column number (1-based) if found, 0 if not found
  * 
  * @example
- * const colNum = SocialCalc.Formula.FieldToColnum(sheet, 1, 5, 1, "Sales", "t");
+ * let colNum = SocialCalc.Formula.FieldToColnum(sheet, 1, 5, 1, "Sales", "t");
  * // Returns: 3 if "Sales" is found in the 3rd column header
  */
 SocialCalc.Formula.FieldToColnum = function(sheet, col1num, ncols, row1num, fieldname, fieldtype) {
@@ -2417,10 +2417,10 @@ SocialCalc.Formula.LookupFunctions = function(fname, operand, foperand, sheet) {
    let lookupvalue, range, offset, rangelookup, offsetvalue, rangeinfo;
    let c, r, cincr, rincr, previousOK, csave, rsave, cell, value, valuetype, cr;
 
-   const scf = SocialCalc.Formula;
-   const operand_value_and_type = scf.OperandValueAndType;
-   const lookup_result_type = scf.LookupResultType;
-   const typelookupplus = scf.TypeLookupTable.plus;
+   let scf = SocialCalc.Formula;
+   let operand_value_and_type = scf.OperandValueAndType;
+   let lookup_result_type = scf.LookupResultType;
+   let typelookupplus = scf.TypeLookupTable.plus;
 
    /**
     * @function PushOperand
@@ -2428,7 +2428,7 @@ SocialCalc.Formula.LookupFunctions = function(fname, operand, foperand, sheet) {
     * @param {string} t - Type of operand
     * @param {*} v - Value of operand
     */
-   const PushOperand = function(t, v) {operand.push({type: t, value: v});};
+   let PushOperand = function(t, v) {operand.push({type: t, value: v});};
 
    // Get the lookup value and convert strings to lowercase for case-insensitive comparison
    lookupvalue = operand_value_and_type(sheet, foperand);
@@ -2664,7 +2664,7 @@ SocialCalc.Formula.FunctionList["VLOOKUP"] = [SocialCalc.Formula.LookupFunctions
 SocialCalc.Formula.IndexFunction = function(fname, operand, foperand, sheet) {
    let range, sheetname, indexinfo, rowindex, colindex, result, resulttype;
 
-   const scf = SocialCalc.Formula;
+   let scf = SocialCalc.Formula;
 
    /**
     * @function PushOperand
@@ -2672,7 +2672,7 @@ SocialCalc.Formula.IndexFunction = function(fname, operand, foperand, sheet) {
     * @param {string} t - Type of operand
     * @param {*} v - Value of operand
     */
-   const PushOperand = function(t, v) {operand.push({type: t, value: v});};
+   let PushOperand = function(t, v) {operand.push({type: t, value: v});};
 
    // Get the range argument
    range = scf.TopOfStackValueAndType(sheet, foperand); // get range
@@ -2801,10 +2801,10 @@ SocialCalc.Formula.CountifSumifFunctions = function(fname, operand, foperand, sh
    let resulttypesum = "";
    let count = 0;
 
-   const scf = SocialCalc.Formula;
-   const operand_value_and_type = scf.OperandValueAndType;
-   const lookup_result_type = scf.LookupResultType;
-   const typelookupplus = scf.TypeLookupTable.plus;
+   let scf = SocialCalc.Formula;
+   let operand_value_and_type = scf.OperandValueAndType;
+   let lookup_result_type = scf.LookupResultType;
+   let typelookupplus = scf.TypeLookupTable.plus;
 
    /**
     * @function PushOperand
@@ -2812,7 +2812,7 @@ SocialCalc.Formula.CountifSumifFunctions = function(fname, operand, foperand, sh
     * @param {string} t - Type of operand
     * @param {*} v - Value of operand
     */
-   const PushOperand = function(t, v) {operand.push({type: t, value: v});};
+   let PushOperand = function(t, v) {operand.push({type: t, value: v});};
 
    // Get function arguments
    range = scf.TopOfStackValueAndType(sheet, foperand); // get range or coord
@@ -2951,12 +2951,12 @@ SocialCalc.Formula.FunctionList["IF"] = [SocialCalc.Formula.IfFunction, 3, "iffu
  * SocialCalc.Formula.DateFunction("DATE", operand, foperand, sheet);
  */
 SocialCalc.Formula.DateFunction = function(fname, operand, foperand, sheet) {
-   const scf = SocialCalc.Formula;
+   let scf = SocialCalc.Formula;
    let result = 0;
    
-   const year = scf.OperandAsNumber(sheet, foperand);
-   const month = scf.OperandAsNumber(sheet, foperand);
-   const day = scf.OperandAsNumber(sheet, foperand);
+   let year = scf.OperandAsNumber(sheet, foperand);
+   let month = scf.OperandAsNumber(sheet, foperand);
+   let day = scf.OperandAsNumber(sheet, foperand);
    
    let resulttype = scf.LookupResultType(year.type, month.type, scf.TypeLookupTable.twoargnumeric);
    resulttype = scf.LookupResultType(resulttype, day.type, scf.TypeLookupTable.twoargnumeric);
@@ -2994,12 +2994,12 @@ SocialCalc.Formula.FunctionList["DATE"] = [SocialCalc.Formula.DateFunction, 3, "
  * SocialCalc.Formula.TimeFunction("TIME", operand, foperand, sheet);
  */
 SocialCalc.Formula.TimeFunction = function(fname, operand, foperand, sheet) {
-   const scf = SocialCalc.Formula;
+   let scf = SocialCalc.Formula;
    let result = 0;
    
-   const hours = scf.OperandAsNumber(sheet, foperand);
-   const minutes = scf.OperandAsNumber(sheet, foperand);
-   const seconds = scf.OperandAsNumber(sheet, foperand);
+   let hours = scf.OperandAsNumber(sheet, foperand);
+   let minutes = scf.OperandAsNumber(sheet, foperand);
+   let seconds = scf.OperandAsNumber(sheet, foperand);
    
    let resulttype = scf.LookupResultType(hours.type, minutes.type, scf.TypeLookupTable.twoargnumeric);
    resulttype = scf.LookupResultType(resulttype, seconds.type, scf.TypeLookupTable.twoargnumeric);
@@ -3039,11 +3039,11 @@ SocialCalc.Formula.FunctionList["TIME"] = [SocialCalc.Formula.TimeFunction, 3, "
  */
 SocialCalc.Formula.DMYFunctions = function(fname, operand, foperand, sheet) {
    let ymd, dtype, doffset;
-   const scf = SocialCalc.Formula;
+   let scf = SocialCalc.Formula;
    let result = 0;
 
-   const datevalue = scf.OperandAsNumber(sheet, foperand);
-   const resulttype = scf.LookupResultType(datevalue.type, datevalue.type, scf.TypeLookupTable.oneargnumeric);
+   let datevalue = scf.OperandAsNumber(sheet, foperand);
+   let resulttype = scf.LookupResultType(datevalue.type, datevalue.type, scf.TypeLookupTable.oneargnumeric);
 
    if (resulttype.charAt(0) == "n") {
       ymd = SocialCalc.FormatNumber.convert_date_julian_to_gregorian(
@@ -3120,11 +3120,11 @@ SocialCalc.Formula.FunctionList["WEEKDAY"] = [SocialCalc.Formula.DMYFunctions, -
  */
 SocialCalc.Formula.HMSFunctions = function(fname, operand, foperand, sheet) {
    let hours, minutes, seconds, fraction;
-   const scf = SocialCalc.Formula;
+   let scf = SocialCalc.Formula;
    let result = 0;
 
-   const datetime = scf.OperandAsNumber(sheet, foperand);
-   const resulttype = scf.LookupResultType(datetime.type, datetime.type, scf.TypeLookupTable.oneargnumeric);
+   let datetime = scf.OperandAsNumber(sheet, foperand);
+   let resulttype = scf.LookupResultType(datetime.type, datetime.type, scf.TypeLookupTable.oneargnumeric);
 
    if (resulttype.charAt(0) == "n") {
       if (datetime.value < 0) {
@@ -3190,14 +3190,14 @@ SocialCalc.Formula.FunctionList["SECOND"] = [SocialCalc.Formula.HMSFunctions, 1,
  * SocialCalc.Formula.ExactFunction("EXACT", operand, foperand, sheet);
  */
 SocialCalc.Formula.ExactFunction = function(fname, operand, foperand, sheet) {
-   const scf = SocialCalc.Formula;
+   let scf = SocialCalc.Formula;
    let result = 0;
    let resulttype = "nl";
 
-   const value1 = scf.OperandValueAndType(sheet, foperand);
-   const v1type = value1.type.charAt(0);
-   const value2 = scf.OperandValueAndType(sheet, foperand);
-   const v2type = value2.type.charAt(0);
+   let value1 = scf.OperandValueAndType(sheet, foperand);
+   let v1type = value1.type.charAt(0);
+   let value2 = scf.OperandValueAndType(sheet, foperand);
+   let v2type = value2.type.charAt(0);
 
    if (v1type == "t") { // First value is text
       if (v2type == "t") {
@@ -3309,14 +3309,14 @@ SocialCalc.Formula.ArgList = {
  */
 SocialCalc.Formula.StringFunctions = function(fname, operand, foperand, sheet) {
    let i, value, offset, len, start, count;
-   const scf = SocialCalc.Formula;
+   let scf = SocialCalc.Formula;
    let result = 0;
    let resulttype = "e#VALUE!";
 
-   const numargs = foperand.length;
-   const argdef = scf.ArgList[fname];
-   const operand_value = [];
-   const operand_type = [];
+   let numargs = foperand.length;
+   let argdef = scf.ArgList[fname];
+   let operand_value = [];
+   let operand_type = [];
 
    // Process and validate all arguments
    for (i = 1; i <= numargs; i++) { // go through each arg, get value and type, and check for errors
@@ -3538,12 +3538,12 @@ SocialCalc.Formula.FunctionList["UPPER"] = [SocialCalc.Formula.StringFunctions, 
  * SocialCalc.Formula.IsFunctions("ISNUMBER", operand, foperand, sheet);
  */
 SocialCalc.Formula.IsFunctions = function(fname, operand, foperand, sheet) {
-   const scf = SocialCalc.Formula;
+   let scf = SocialCalc.Formula;
    let result = 0;
-   const resulttype = "nl"; // Logical result type
+   let resulttype = "nl"; // Logical result type
 
-   const value = scf.OperandValueAndType(sheet, foperand);
-   const t = value.type.charAt(0);
+   let value = scf.OperandValueAndType(sheet, foperand);
+   let t = value.type.charAt(0);
 
    switch (fname) {
       case "ISBLANK":
@@ -3623,12 +3623,12 @@ SocialCalc.Formula.FunctionList["ISTEXT"] = [SocialCalc.Formula.IsFunctions, 1, 
  * SocialCalc.Formula.NTVFunctions("VALUE", operand, foperand, sheet);
  */
 SocialCalc.Formula.NTVFunctions = function(fname, operand, foperand, sheet) {
-   const scf = SocialCalc.Formula;
+   let scf = SocialCalc.Formula;
    let result = 0;
    let resulttype = "e#VALUE!";
 
-   const value = scf.OperandValueAndType(sheet, foperand);
-   const t = value.type.charAt(0);
+   let value = scf.OperandValueAndType(sheet, foperand);
+   let t = value.type.charAt(0);
 
    switch (fname) {
       case "N":
@@ -3718,9 +3718,9 @@ SocialCalc.Formula.FunctionList["VALUE"] = [SocialCalc.Formula.NTVFunctions, 1, 
  */
 SocialCalc.Formula.Math1Functions = function(fname, operand, foperand, sheet) {
    let v1, value, f;
-   const result = {};
+   let result = {};
 
-   const scf = SocialCalc.Formula;
+   let scf = SocialCalc.Formula;
 
    v1 = scf.OperandAsNumber(sheet, foperand);
    value = v1.value;
@@ -3898,9 +3898,9 @@ SocialCalc.Formula.FunctionList["TAN"] = [SocialCalc.Formula.Math1Functions, 1, 
  */
 SocialCalc.Formula.Math2Functions = function(fname, operand, foperand, sheet) {
    let xval, yval, value, quotient, decimalscale, i;
-   const result = {};
+   let result = {};
 
-   const scf = SocialCalc.Formula;
+   let scf = SocialCalc.Formula;
 
    xval = scf.OperandAsNumber(sheet, foperand);
    yval = scf.OperandAsNumber(sheet, foperand);
@@ -3997,9 +3997,9 @@ SocialCalc.Formula.FunctionList["TRUNC"] = [SocialCalc.Formula.Math2Functions, 2
  */
 SocialCalc.Formula.LogFunction = function(fname, operand, foperand, sheet) {
    let value, value2;
-   const result = {};
+   let result = {};
 
-   const scf = SocialCalc.Formula;
+   let scf = SocialCalc.Formula;
 
    result.value = 0;
 
@@ -4063,11 +4063,11 @@ SocialCalc.Formula.FunctionList["LOG"] = [SocialCalc.Formula.LogFunction, -1, "l
 SocialCalc.Formula.RoundFunction = function(fname, operand, foperand, sheet) {
    let value2, decimalscale, scaledvalue, i;
 
-   const scf = SocialCalc.Formula;
+   let scf = SocialCalc.Formula;
    let result = 0;
    let resulttype = "e#VALUE!";
 
-   const value = scf.OperandValueAndType(sheet, foperand);
+   let value = scf.OperandValueAndType(sheet, foperand);
    resulttype = scf.LookupResultType(value.type, value.type, scf.TypeLookupTable.oneargnumeric);
 
    // Check for optional precision argument
@@ -4147,7 +4147,7 @@ SocialCalc.Formula.FunctionList["ROUND"] = [SocialCalc.Formula.RoundFunction, -1
 SocialCalc.Formula.AndOrFunctions = function(fname, operand, foperand, sheet) {
    let value1, result;
 
-   const scf = SocialCalc.Formula;
+   let scf = SocialCalc.Formula;
    let resulttype = "";
 
    // Initialize result based on function type
@@ -4215,8 +4215,8 @@ SocialCalc.Formula.FunctionList["OR"] = [SocialCalc.Formula.AndOrFunctions, -1, 
  */
 SocialCalc.Formula.NotFunction = function(fname, operand, foperand, sheet) {
    let result = 0;
-   const scf = SocialCalc.Formula;
-   const value = scf.OperandValueAndType(sheet, foperand);
+   let scf = SocialCalc.Formula;
+   let value = scf.OperandValueAndType(sheet, foperand);
    let resulttype = scf.LookupResultType(value.type, value.type, scf.TypeLookupTable.propagateerror);
 
    if (value.type.charAt(0) == "n" || value.type == "b") {
@@ -4260,10 +4260,10 @@ SocialCalc.Formula.FunctionList["NOT"] = [SocialCalc.Formula.NotFunction, 1, "v"
 SocialCalc.Formula.ChooseFunction = function(fname, operand, foperand, sheet) {
    let resulttype, count, value1;
    let result = 0;
-   const scf = SocialCalc.Formula;
+   let scf = SocialCalc.Formula;
 
    // Get the index argument
-   const cindex = scf.OperandAsNumber(sheet, foperand);
+   let cindex = scf.OperandAsNumber(sheet, foperand);
 
    if (cindex.type.charAt(0) != "n") {
       cindex.value = 0;
@@ -4318,9 +4318,9 @@ SocialCalc.Formula.FunctionList["CHOOSE"] = [SocialCalc.Formula.ChooseFunction, 
 SocialCalc.Formula.ColumnsRowsFunctions = function(fname, operand, foperand, sheet) {
    let resulttype, rangeinfo;
    let result = 0;
-   const scf = SocialCalc.Formula;
+   let scf = SocialCalc.Formula;
 
-   const value1 = scf.TopOfStackValueAndType(sheet, foperand);
+   let value1 = scf.TopOfStackValueAndType(sheet, foperand);
 
    if (value1.type == "coord") {
       // Single cell reference always has 1 row and 1 column
@@ -4380,7 +4380,7 @@ SocialCalc.Formula.FunctionList["ROWS"] = [SocialCalc.Formula.ColumnsRowsFunctio
  */
 SocialCalc.Formula.ZeroArgFunctions = function(fname, operand, foperand, sheet) {
    let startval, tzoffset, start_1_1_1970, seconds_in_a_day, nowdays;
-   const result = {value: 0};
+   let result = {value: 0};
 
    switch (fname) {
       case "FALSE":
@@ -4484,13 +4484,13 @@ SocialCalc.Formula.FunctionList["TRUE"] = [SocialCalc.Formula.ZeroArgFunctions, 
  */
 SocialCalc.Formula.DDBFunction = function(fname, operand, foperand, sheet) {
    let method, depreciation, accumulateddepreciation, i;
-   const scf = SocialCalc.Formula;
+   let scf = SocialCalc.Formula;
 
    // Get required arguments
-   const cost = scf.OperandAsNumber(sheet, foperand);
-   const salvage = scf.OperandAsNumber(sheet, foperand);
-   const lifetime = scf.OperandAsNumber(sheet, foperand);
-   const period = scf.OperandAsNumber(sheet, foperand);
+   let cost = scf.OperandAsNumber(sheet, foperand);
+   let salvage = scf.OperandAsNumber(sheet, foperand);
+   let lifetime = scf.OperandAsNumber(sheet, foperand);
+   let period = scf.OperandAsNumber(sheet, foperand);
 
    // Check for errors in required arguments
    if (scf.CheckForErrorValue(operand, cost)) return;
@@ -4564,12 +4564,12 @@ SocialCalc.Formula.FunctionList["DDB"] = [SocialCalc.Formula.DDBFunction, -4, "d
  */
 SocialCalc.Formula.SLNFunction = function(fname, operand, foperand, sheet) {
    let depreciation;
-   const scf = SocialCalc.Formula;
+   let scf = SocialCalc.Formula;
 
    // Get required arguments
-   const cost = scf.OperandAsNumber(sheet, foperand);
-   const salvage = scf.OperandAsNumber(sheet, foperand);
-   const lifetime = scf.OperandAsNumber(sheet, foperand);
+   let cost = scf.OperandAsNumber(sheet, foperand);
+   let salvage = scf.OperandAsNumber(sheet, foperand);
+   let lifetime = scf.OperandAsNumber(sheet, foperand);
 
    // Check for errors in arguments
    if (scf.CheckForErrorValue(operand, cost)) return;
@@ -4625,13 +4625,13 @@ SocialCalc.Formula.FunctionList["SLN"] = [SocialCalc.Formula.SLNFunction, 3, "cs
  */
 SocialCalc.Formula.SYDFunction = function(fname, operand, foperand, sheet) {
    let depreciation, sumperiods;
-   const scf = SocialCalc.Formula;
+   let scf = SocialCalc.Formula;
 
    // Get required arguments
-   const cost = scf.OperandAsNumber(sheet, foperand);
-   const salvage = scf.OperandAsNumber(sheet, foperand);
-   const lifetime = scf.OperandAsNumber(sheet, foperand);
-   const period = scf.OperandAsNumber(sheet, foperand);
+   let cost = scf.OperandAsNumber(sheet, foperand);
+   let salvage = scf.OperandAsNumber(sheet, foperand);
+   let lifetime = scf.OperandAsNumber(sheet, foperand);
+   let period = scf.OperandAsNumber(sheet, foperand);
 
    // Check for errors in arguments
    if (scf.CheckForErrorValue(operand, cost)) return;
@@ -4706,12 +4706,12 @@ SocialCalc.Formula.InterestFunctions = function(fname, operand, foperand, sheet)
    let pv, fv, rate, n, payment, paytype, guess, part1, part2, part3, part4, part5;
    let olddelta, maxloop, tries, deltaepsilon, oldrate, m;
 
-   const scf = SocialCalc.Formula;
+   let scf = SocialCalc.Formula;
 
    // Get the first three required arguments
-   const aval = scf.OperandAsNumber(sheet, foperand);
-   const bval = scf.OperandAsNumber(sheet, foperand);
-   const cval = scf.OperandAsNumber(sheet, foperand);
+   let aval = scf.OperandAsNumber(sheet, foperand);
+   let bval = scf.OperandAsNumber(sheet, foperand);
+   let cval = scf.OperandAsNumber(sheet, foperand);
 
    // Determine result type based on argument types
    resulttype = scf.LookupResultType(aval.type, bval.type, scf.TypeLookupTable.twoargnumeric);
@@ -4837,7 +4837,7 @@ SocialCalc.Formula.InterestFunctions = function(fname, operand, foperand, sheet)
             maxloop = 100;
             tries = 0;
             let delta = 1;
-            const epsilon = 0.0000001; // convergence threshold
+            let epsilon = 0.0000001; // convergence threshold
             rate = guess || 0.00000001; // zero is not allowed
             
             while ((delta >= 0 ? delta : -delta) > epsilon && (rate != oldrate)) {
@@ -4911,7 +4911,7 @@ SocialCalc.Formula.FunctionList["RATE"] = [SocialCalc.Formula.InterestFunctions,
 SocialCalc.Formula.NPVFunction = function(fname, operand, foperand, sheet) {
    let resulttypenpv, rate, sum, factor, value1;
 
-   const scf = SocialCalc.Formula;
+   let scf = SocialCalc.Formula;
 
    // Get the discount rate (first argument)
    rate = scf.OperandAsNumber(sheet, foperand);
@@ -4980,10 +4980,10 @@ SocialCalc.Formula.FunctionList["NPV"] = [SocialCalc.Formula.NPVFunction, -2, "n
  */
 SocialCalc.Formula.IRRFunction = function(fname, operand, foperand, sheet) {
    let value1, guess, oldsum, maxloop, tries, epsilon, rate, oldrate, m, sum, factor, i;
-   const rangeoperand = [];
-   const cashflows = [];
+   let rangeoperand = [];
+   let cashflows = [];
 
-   const scf = SocialCalc.Formula;
+   let scf = SocialCalc.Formula;
 
    // Get the range of cash flows (first argument)
    rangeoperand.push(foperand.pop()); // first operand is a range
@@ -5128,7 +5128,7 @@ SocialCalc.Formula.SheetCache = {
  * @returns {SocialCalc.Sheet|null} Sheet object if found/cached, null if not available or loading
  * 
  * @example
- * const sheet = SocialCalc.Formula.FindInSheetCache("Sheet2");
+ * let sheet = SocialCalc.Formula.FindInSheetCache("Sheet2");
  * if (sheet) {
  *    // Use the cached sheet
  * } else {
@@ -5137,9 +5137,9 @@ SocialCalc.Formula.SheetCache = {
  */
 SocialCalc.Formula.FindInSheetCache = function(sheetname) {
    let str;
-   const sfsc = SocialCalc.Formula.SheetCache;
+   let sfsc = SocialCalc.Formula.SheetCache;
 
-   const nsheetname = SocialCalc.Formula.NormalizeSheetName(sheetname); // normalize different versions
+   let nsheetname = SocialCalc.Formula.NormalizeSheetName(sheetname); // normalize different versions
 
    if (sfsc.sheets[nsheetname]) { // a sheet by that name is in the cache already
       return sfsc.sheets[nsheetname].sheet; // return it
@@ -5167,14 +5167,14 @@ SocialCalc.Formula.FindInSheetCache = function(sheetname) {
  * @returns {SocialCalc.Sheet|null} The newly created and cached sheet object
  * 
  * @example
- * const newSheet = SocialCalc.Formula.AddSheetToCache("Sheet2", savedSheetData);
+ * let newSheet = SocialCalc.Formula.AddSheetToCache("Sheet2", savedSheetData);
  * // Sheet is now available in cache for formula references
  */
 SocialCalc.Formula.AddSheetToCache = function(sheetname, str) {
    let newsheet = null;
-   const sfsc = SocialCalc.Formula.SheetCache;
-   const sfscc = sfsc.constants;
-   const newsheetname = SocialCalc.Formula.NormalizeSheetName(sheetname);
+   let sfsc = SocialCalc.Formula.SheetCache;
+   let sfscc = sfsc.constants;
+   let newsheetname = SocialCalc.Formula.NormalizeSheetName(sheetname);
 
    if (str) {
       newsheet = new SocialCalc.Sheet();
@@ -5204,7 +5204,7 @@ SocialCalc.Formula.AddSheetToCache = function(sheetname, str) {
  * @returns {string} Normalized sheet name
  * 
  * @example
- * const normalized = SocialCalc.Formula.NormalizeSheetName("MySheet");
+ * let normalized = SocialCalc.Formula.NormalizeSheetName("MySheet");
  * // Returns "mysheet" (or result of custom callback)
  */
 SocialCalc.Formula.NormalizeSheetName = function(sheetname) {
@@ -5283,7 +5283,7 @@ SocialCalc.Formula.FreshnessInfo = {
  * // All freshness tracking is now cleared for new recalc cycle
  */
 SocialCalc.Formula.FreshnessInfoReset = function() {
-   const scffi = SocialCalc.Formula.FreshnessInfo;
+   let scffi = SocialCalc.Formula.FreshnessInfo;
 
    scffi.sheets = {};
    scffi.volatile = {};
@@ -5344,7 +5344,7 @@ SocialCalc.Formula.PlainCoord = function(coord) {
  */
 SocialCalc.Formula.OrderRangeParts = function(coord1, coord2) {
    let cr1, cr2;
-   const result = {};
+   let result = {};
 
    cr1 = SocialCalc.coordToCr(coord1);
    cr2 = SocialCalc.coordToCr(coord2);
